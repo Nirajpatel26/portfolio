@@ -94,7 +94,7 @@ const observer = new IntersectionObserver((entries) => {
 }, observerOptions);
 
 // Observe all sections and cards
-document.querySelectorAll('section, .project-card, .skill-category, .contact-card, .timeline-item').forEach(el => {
+document.querySelectorAll('section, .project-card, .skill-category, .contact-card, .timeline-item, .recommendation-card').forEach(el => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(20px)';
     el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
@@ -158,6 +158,18 @@ if (statsSection) {
 // Add hover effect to project cards
 const projectCards = document.querySelectorAll('.project-card');
 projectCards.forEach(card => {
+    card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-10px)';
+    });
+    
+    card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+    });
+});
+
+// Add hover effect to recommendation cards
+const recommendationCards = document.querySelectorAll('.recommendation-card');
+recommendationCards.forEach(card => {
     card.addEventListener('mouseenter', function() {
         this.style.transform = 'translateY(-10px)';
     });
