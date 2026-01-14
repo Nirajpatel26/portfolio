@@ -614,11 +614,29 @@ section {
     .timeline-marker {
         left: 2px;
     }
+    
+    .image-placeholder {
+        width: 280px;
+        height: 280px;
+    }
 }
 
 @media (max-width: 768px) {
     .nav-menu {
-        display: none;
+        position: fixed;
+        left: -100%;
+        top: 70px;
+        flex-direction: column;
+        background-color: white;
+        width: 100%;
+        text-align: center;
+        transition: 0.3s;
+        box-shadow: var(--shadow-lg);
+        padding: 2rem 0;
+    }
+
+    .nav-menu.active {
+        left: 0;
     }
 
     .hamburger {
@@ -651,5 +669,13 @@ section {
 
     .btn {
         text-align: center;
+    }
+    
+    .container {
+        padding: 0 1rem;
+    }
+    
+    .hero-image {
+        order: -1;
     }
 }
