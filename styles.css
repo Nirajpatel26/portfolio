@@ -224,6 +224,21 @@ body {
     color: white;
 }
 
+.btn-download {
+    background: var(--gradient-primary);
+    color: white;
+    box-shadow: var(--shadow-md);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.btn-download:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-xl);
+}
+
 .hero-image {
     display: flex;
     justify-content: center;
@@ -277,6 +292,10 @@ section {
     color: var(--text-secondary);
     font-size: 1.1rem;
     line-height: 1.8;
+}
+
+.resume-download {
+    margin-top: 2rem;
 }
 
 .about-highlights {
@@ -540,9 +559,80 @@ section {
     transform: translateY(-2px);
 }
 
+/* Recommendations Section */
+.recommendations {
+    background: var(--bg-primary);
+}
+
+.recommendations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.recommendation-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-left: 4px solid var(--primary-color);
+}
+
+.recommendation-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+}
+
+.recommendation-header {
+    margin-bottom: 1.5rem;
+}
+
+.recommender-info h3 {
+    color: var(--text-primary);
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+}
+
+.recommender-title {
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+}
+
+.recommender-relationship {
+    color: var(--text-light);
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+.recommendation-content {
+    margin-bottom: 1.5rem;
+}
+
+.recommendation-content p {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    font-size: 1.05rem;
+    font-style: italic;
+}
+
+.recommendation-footer {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+}
+
+.recommendation-date {
+    color: var(--text-light);
+    font-size: 0.85rem;
+}
+
 /* Contact Section */
 .contact {
-    background: var(--bg-primary);
+    background: var(--bg-secondary);
 }
 
 .contact-description {
@@ -615,6 +705,10 @@ section {
     }
 
     .projects-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .recommendations-grid {
         grid-template-columns: 1fr;
     }
 
