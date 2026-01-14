@@ -52,6 +52,32 @@ if (hamburger) {
     });
 }
 
+// Dynamic Typing Animation for Hero Title
+const titles = ['Software Engineer', 'Cloud Engineer', 'Platform Engineer'];
+let titleIndex = 0;
+const typingTextElement = document.getElementById('typingText');
+
+function changeTitle() {
+    if (typingTextElement) {
+        // Fade out
+        typingTextElement.style.opacity = '0';
+        typingTextElement.style.transform = 'translateY(-10px)';
+        
+        setTimeout(() => {
+            // Change text
+            titleIndex = (titleIndex + 1) % titles.length;
+            typingTextElement.textContent = titles[titleIndex];
+            
+            // Fade in
+            typingTextElement.style.opacity = '1';
+            typingTextElement.style.transform = 'translateY(0)';
+        }, 500);
+    }
+}
+
+// Start the title rotation
+setInterval(changeTitle, 3000);
+
 // Intersection Observer for fade-in animations
 const observerOptions = {
     threshold: 0.1,
@@ -94,25 +120,6 @@ window.addEventListener('scroll', () => {
         }
     });
 });
-
-// Typing effect for hero title (optional enhancement)
-const heroTitle = document.querySelector('.hero-title');
-if (heroTitle) {
-    const text = heroTitle.textContent;
-    heroTitle.textContent = '';
-    let index = 0;
-    
-    const typeWriter = () => {
-        if (index < text.length) {
-            heroTitle.textContent += text.charAt(index);
-            index++;
-            setTimeout(typeWriter, 100);
-        }
-    };
-    
-    // Start typing after page load
-    setTimeout(typeWriter, 500);
-}
 
 // Counter animation for stats
 const stats = document.querySelectorAll('.stat h3');
