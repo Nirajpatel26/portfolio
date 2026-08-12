@@ -1,6 +1,6 @@
 # Niraj Patel - Portfolio Website
 
-Personal portfolio website showcasing my experience as a Data Platform Engineer and my journey through Software Engineering Systems at Northeastern University.
+Personal portfolio website showcasing my experience as a Data Platform Engineer and my MS in Software Engineering Systems from Northeastern University.
 
 ## 🌟 Features
 
