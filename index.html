@@ -3,692 +3,715 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Niraj Patel — Data Platform & Cloud Engineer. Building agentic AI systems, cloud infrastructure, and DevOps automation.">
-    <meta name="theme-color" content="#0a0a14">
-    <title>Niraj Patel · Data Platform & Cloud Engineer</title>
+    <meta name="description" content="Niraj Patel — Data Platform &amp; Cloud Engineer. An arcade-styled portfolio: quests, loot, skill trees, and one playable mini-game.">
+    <meta name="theme-color" content="#07040d">
+    <title>Niraj Patel · Player One · Data Platform &amp; Cloud Engineer</title>
     <link rel="icon" type="image/jpeg" href="profile.jpg">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="main.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Animated background layers -->
-    <div class="bg-grid"></div>
-    <div class="bg-glow glow-1"></div>
-    <div class="bg-glow glow-2"></div>
-    <div class="bg-glow glow-3"></div>
-    <div class="bg-noise"></div>
 
-    <!-- Scroll progress bar -->
-    <div class="scroll-progress" id="scrollProgress"></div>
+<!-- ============ Ambient layers ============ -->
+<div class="fx-grid" aria-hidden="true"></div>
+<div class="fx-blob blob-1" aria-hidden="true"></div>
+<div class="fx-blob blob-2" aria-hidden="true"></div>
+<div class="fx-blob blob-3" aria-hidden="true"></div>
+<div class="fx-scan" aria-hidden="true"></div>
+<div class="fx-vignette" aria-hidden="true"></div>
 
-    <!-- Navigation -->
-    <nav class="navbar" id="navbar">
-        <div class="container">
-            <a href="#home" class="nav-brand">
-                <span class="logo-mark">&lt;NP/&gt;</span>
-            </a>
-            <ul class="nav-menu" id="navMenu">
-                <li><a href="#about" class="nav-link"><span class="nav-num">01.</span> About</a></li>
-                <li><a href="#experience" class="nav-link"><span class="nav-num">02.</span> Experience</a></li>
-                <li><a href="#projects" class="nav-link"><span class="nav-num">03.</span> Projects</a></li>
-                <li><a href="#skills" class="nav-link"><span class="nav-num">04.</span> Skills</a></li>
-                <li><a href="#contact" class="nav-link nav-cta">Let's Talk →</a></li>
-            </ul>
-            <button class="hamburger" id="hamburger" aria-label="Menu">
+<!-- ============ Boot / title screen (JS-armed, so no-JS visitors skip it) ============ -->
+<div class="boot" id="boot" aria-hidden="true">
+    <div class="boot-inner">
+        <div class="crt crt-boot">
+            <div class="crt-screen">
+                <p class="boot-kicker">NP&#8209;SYS&nbsp;CRT&nbsp;TERMINAL&nbsp;·&nbsp;v2.6</p>
+                <h1 class="boot-title">
+                    <span class="boot-title-line">NIRAJ</span>
+                    <span class="boot-title-line accent">PATEL</span>
+                </h1>
+                <p class="boot-sub">DATA&nbsp;PLATFORM&nbsp;·&nbsp;CLOUD&nbsp;·&nbsp;AGENTIC&nbsp;AI</p>
+                <pre class="boot-log" id="bootLog" aria-hidden="true"></pre>
+                <p class="boot-press" id="bootPress">
+                    <span class="caret">&#9656;</span> PRESS START
+                </p>
+            </div>
+            <div class="crt-glare" aria-hidden="true"></div>
+        </div>
+        <div class="boot-actions">
+            <button class="btn-arcade" id="btnStart" type="button">START</button>
+            <button class="btn-skip" id="btnSkip" type="button">SKIP INTRO &rarr;</button>
+        </div>
+        <p class="boot-hint">ENTER / SPACE to start &nbsp;·&nbsp; runs entirely in your browser</p>
+    </div>
+</div>
+
+<!-- ============ HUD ============ -->
+<header class="hud" id="hud">
+    <div class="hud-row">
+        <a class="hud-player" href="#home" aria-label="Back to top">
+            <div class="hud-line">
+                <span class="hud-label">PLAYER</span>
+                <span class="hud-value">NIRAJ_PATEL</span>
+                <span class="hud-lv">LV&nbsp;26</span>
+            </div>
+            <div class="hud-line">
+                <span class="hud-label">XP</span>
+                <span class="xp-bar"><span class="xp-fill" id="xpFill"></span></span>
+                <span class="hud-value dim" id="xpText">3.89 / 4.00 GPA</span>
+            </div>
+        </a>
+
+        <nav class="hud-nav" id="hudNav" aria-label="Sections">
+            <a href="#player"       class="hud-tab"><b>01</b> PLAYER</a>
+            <a href="#quests"       class="hud-tab"><b>02</b> QUESTS</a>
+            <a href="#inventory"    class="hud-tab"><b>03</b> INVENTORY</a>
+            <a href="#skills"       class="hud-tab"><b>04</b> SKILLS</a>
+            <a href="#trophies"     class="hud-tab"><b>05</b> TROPHIES</a>
+            <a href="#arcade"       class="hud-tab"><b>06</b> ARCADE</a>
+            <a href="#contact"      class="hud-tab hud-tab-cta">CONTACT</a>
+        </nav>
+
+        <div class="hud-right">
+            <button class="hud-icon" id="btnSound" type="button" aria-pressed="false" title="Toggle blips">
+                <span class="sound-off">&#9834;&#8725;</span><span class="sound-on">&#9834;</span>
+            </button>
+            <div class="hud-coins" title="Achievements found">
+                <span class="coin" aria-hidden="true"></span>
+                <span id="coinCount">0</span><span class="dim">/8</span>
+            </div>
+            <button class="hud-burger" id="btnBurger" type="button" aria-label="Menu" aria-expanded="false">
                 <span></span><span></span><span></span>
             </button>
         </div>
-    </nav>
+    </div>
+    <div class="hud-progress"><span id="hudProgress"></span></div>
+</header>
 
-    <!-- Hero -->
-    <section class="hero" id="home">
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-text">
-                    <div class="hero-badge">
-                        <span class="status-dot"></span>
-                        <span>Available for Full-Time · May 2026</span>
-                    </div>
-                    <h1 class="hero-title">
-                        <span class="hero-greeting">Hi, I'm</span>
-                        <span class="hero-name">Niraj Patel.</span>
-                        <span class="hero-tagline">I build <span class="typing-text" id="typingText">cloud platforms</span><span class="cursor">_</span></span>
-                    </h1>
-                    <p class="hero-description">
-                        Data Platform & Cloud Engineer crafting <span class="text-accent">agentic AI systems</span>,
-                        scalable <span class="text-accent">cloud infrastructure</span>, and intelligent
-                        <span class="text-accent">DevOps automation</span>. Currently pursuing my MS at Northeastern
-                        and shipping production-grade systems for the world's largest custodian bank.
-                    </p>
+<main>
 
-                    <div class="hero-stats">
-                        <div class="stat">
-                            <h3 data-target="3.89">3.89</h3>
-                            <p>GPA · Northeastern</p>
-                        </div>
-                        <div class="stat">
-                            <h3>2+</h3>
-                            <p>Years in Industry</p>
-                        </div>
-                        <div class="stat">
-                            <h3>15+</h3>
-                            <p>Projects Shipped</p>
-                        </div>
-                    </div>
+<!-- ============ HOME ============ -->
+<section class="screen home" id="home">
+    <div class="wrap home-grid">
+        <div class="home-copy">
+            <p class="chip"><span class="chip-dot"></span> READY&nbsp;PLAYER&nbsp;ONE &nbsp;·&nbsp; AVAILABLE MAY 2026</p>
 
-                    <div class="hero-buttons">
-                        <a href="#projects" class="btn btn-primary">
-                            <span>Explore My Work</span>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                        </a>
-                        <a href="#contact" class="btn btn-ghost">
-                            <span>Get in Touch</span>
-                        </a>
-                    </div>
-                </div>
+            <h1 class="home-title">
+                <span class="t-small">HI, I'M</span>
+                <span class="t-big">NIRAJ<span class="accent">.</span></span>
+            </h1>
 
-                <div class="hero-visual">
-                    <div class="orbit-container">
-                        <div class="orbit orbit-1"></div>
-                        <div class="orbit orbit-2"></div>
-                        <div class="orbit orbit-3"></div>
-                        <div class="profile-frame">
-                            <div class="profile-glow"></div>
-                            <img src="profile.jpg" alt="Niraj Patel">
-                        </div>
-                        <div class="floating-tag tag-aws">AWS</div>
-                        <div class="floating-tag tag-tf">Terraform</div>
-                        <div class="floating-tag tag-py">Python</div>
-                        <div class="floating-tag tag-ai">GenAI</div>
-                        <div class="floating-tag tag-k8s">Docker</div>
-                    </div>
-                </div>
+            <p class="home-role">
+                CLASS &rsaquo; <span class="accent" id="roleRotator">DATA PLATFORM ENGINEER</span><span class="blink">_</span>
+            </p>
+
+            <p class="home-desc">
+                I build <strong>agentic AI systems</strong>, scalable <strong>cloud infrastructure</strong>, and
+                <strong>DevOps automation</strong> that deletes manual work. Currently finishing my MS at
+                Northeastern while shipping production systems for the world's largest custodian bank.
+            </p>
+
+            <div class="home-stats">
+                <div class="stat-box"><b data-count="3.89" data-dec="2">3.89</b><span>GPA · NEU</span></div>
+                <div class="stat-box"><b data-count="2" data-suffix="+">2+</b><span>YRS INDUSTRY</span></div>
+                <div class="stat-box"><b data-count="15" data-suffix="+">15+</b><span>PROJECTS</span></div>
+                <div class="stat-box"><b data-count="150" data-suffix="+">150+</b><span>APPS AUTOMATED</span></div>
             </div>
+
+            <div class="home-btns">
+                <a href="#quests" class="btn-arcade">&#9656; PRESS START</a>
+                <a href="#inventory" class="btn-ghost">OPEN INVENTORY</a>
+            </div>
+
+            <p class="home-tip">
+                <kbd>&uarr;</kbd><kbd>&uarr;</kbd><kbd>&darr;</kbd><kbd>&darr;</kbd><kbd>&larr;</kbd><kbd>&rarr;</kbd><kbd>&larr;</kbd><kbd>&rarr;</kbd><kbd>B</kbd><kbd>A</kbd>
+                &nbsp;— you know what to do.
+            </p>
         </div>
 
-        <a href="#about" class="scroll-indicator" aria-label="Scroll down">
-            <span class="scroll-mouse"><span class="scroll-wheel"></span></span>
-            <span class="scroll-text">SCROLL</span>
-        </a>
-    </section>
-
-    <!-- About -->
-    <section class="about section" id="about">
-        <div class="container">
-            <div class="section-head">
-                <span class="section-num">01.</span>
-                <h2 class="section-title">About Me</h2>
-                <span class="section-line"></span>
-            </div>
-
-            <div class="about-content">
-                <div class="about-text">
-                    <p>
-                        I'm a <strong>Data Platform Engineer</strong> with a builder's mindset, currently pursuing my
-                        <strong>MS in Software Engineering Systems</strong> at <strong>Northeastern University</strong>
-                        (graduating May 2026, GPA 3.89).
-                    </p>
-                    <p>
-                        Most recently, I helped automate critical infrastructure at <strong>State Street</strong> — eliminating
-                        manual toil across 150+ Oracle Cloud apps and migrating 25+ Terraform modules to a modern Git/Harness
-                        pipeline. Before that, I spent two years at <strong>TCS</strong> shipping CI/CD systems and
-                        cloud migrations for enterprise clients.
-                    </p>
-                    <p>
-                        Lately I've been deep in <strong>agentic AI</strong> — building multi-agent systems for
-                        cloud architecture review, self-healing CI pipelines, and natural-language-to-IaC generation.
-                        I love the intersection of <span class="text-accent">infrastructure</span>,
-                        <span class="text-accent">automation</span>, and <span class="text-accent">intelligence</span>.
-                    </p>
-
-                    <a href="Niraj_Patel_Resume.pdf" download class="btn btn-primary btn-resume">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                        <span>Download Resume</span>
-                    </a>
+        <div class="home-visual">
+            <div class="crt crt-hero">
+                <div class="crt-screen crt-photo">
+                    <img src="profile.jpg" alt="Niraj Patel" class="glitch-img">
+                    <span class="crt-roll" aria-hidden="true"></span>
+                    <span class="crt-tag">P1</span>
                 </div>
-
-                <div class="about-cards">
-                    <div class="info-card">
-                        <div class="info-icon">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-                        </div>
-                        <h3>Education</h3>
-                        <p class="info-primary">Northeastern University</p>
-                        <p class="info-secondary">MS · Software Engineering Systems</p>
-                        <p class="info-meta">GPA 3.89 · 2024 – 2026</p>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-icon">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
-                        </div>
-                        <h3>Certifications</h3>
-                        <p class="cert-item">AWS Certified Developer – Associate</p>
-                        <p class="cert-item">Microsoft Azure Administrator (AZ-104)</p>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-icon">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                        </div>
-                        <h3>Currently</h3>
-                        <p class="info-primary">Building agentic AI</p>
-                        <p class="info-secondary">Multi-agent systems for cloud & DevOps</p>
-                        <p class="info-meta">Open to FT · May 2026</p>
-                    </div>
-                </div>
+                <div class="crt-glare" aria-hidden="true"></div>
+                <div class="crt-knobs" aria-hidden="true"><i></i><i></i></div>
             </div>
+            <span class="pix-tag pt-1">AWS</span>
+            <span class="pix-tag pt-2">TERRAFORM</span>
+            <span class="pix-tag pt-3">PYTHON</span>
+            <span class="pix-tag pt-4">GENAI</span>
+            <span class="pix-tag pt-5">DOCKER</span>
         </div>
-    </section>
+    </div>
 
-    <!-- Experience -->
-    <section class="experience section" id="experience">
-        <div class="container">
-            <div class="section-head">
-                <span class="section-num">02.</span>
-                <h2 class="section-title">Experience</h2>
-                <span class="section-line"></span>
-            </div>
+    <a href="#player" class="scroll-cue" aria-label="Scroll">
+        <span class="cue-arrow">&#9660;</span><span class="cue-text">SCROLL</span>
+    </a>
+</section>
 
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-card">
-                        <div class="timeline-header">
-                            <span class="timeline-date">Jun 2025 – Aug 2025</span>
-                            <span class="timeline-type">Internship</span>
-                        </div>
-                        <h3>Data Platform Engineer Intern</h3>
-                        <h4 class="timeline-org">State Street · Boston, USA</h4>
-                        <ul class="timeline-list">
-                            <li>Automated monthly password rotation across <strong>150+ Oracle Cloud applications</strong> using Python and Bash, eliminating 5+ hours of manual toil monthly and reducing human error.</li>
-                            <li>Led migration of <strong>3 Terraform codebases (25+ modules)</strong> from Azure DevOps to Git/Harness + Terraform Enterprise, cutting deployment time from <strong>90 to 30 minutes</strong>.</li>
-                            <li>Architected an Azure jumpserver with OCI integration via Terraform — enabling secure cross-cloud access for the data platform team.</li>
-                        </ul>
-                        <div class="timeline-tech">
-                            <span class="tech-pill">Python</span>
-                            <span class="tech-pill">Terraform</span>
-                            <span class="tech-pill">Harness</span>
-                            <span class="tech-pill">Azure</span>
-                            <span class="tech-pill">Oracle Cloud</span>
-                            <span class="tech-pill">Bash</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-card">
-                        <div class="timeline-header">
-                            <span class="timeline-date">Jul 2022 – Aug 2024</span>
-                            <span class="timeline-type">Full-Time</span>
-                        </div>
-                        <h3>Assistant System Engineer</h3>
-                        <h4 class="timeline-org">Tata Consultancy Services · Gandhinagar, India</h4>
-                        <ul class="timeline-list">
-                            <li>Engineered CI/CD pipelines integrated with Git, achieving deployment lead times <strong>under 3 hours</strong>.</li>
-                            <li>Containerized Java and Node.js microservices with Docker, increasing scalability and reducing resource utilization by <strong>7%</strong>.</li>
-                            <li>Automated infrastructure provisioning with Terraform, achieving a <strong>20% reduction</strong> in environment setup time.</li>
-                            <li>Migrated on-premises workloads to Azure, processing <strong>1TB of data daily</strong> via Azure Databricks and Data Factory.</li>
-                            <li>Adopted agile methodologies, cutting cycle time to 2 days/sprint and increasing throughput by <strong>30%</strong>.</li>
-                        </ul>
-                        <div class="timeline-tech">
-                            <span class="tech-pill">Jenkins</span>
-                            <span class="tech-pill">Docker</span>
-                            <span class="tech-pill">Terraform</span>
-                            <span class="tech-pill">Azure Databricks</span>
-                            <span class="tech-pill">Data Factory</span>
-                            <span class="tech-pill">Java</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<!-- ============ PLAYER / ABOUT ============ -->
+<section class="screen" id="player">
+    <div class="wrap">
+        <div class="sec-head">
+            <span class="sec-num">01</span>
+            <h2 class="sec-title">PLAYER&nbsp;CARD</h2>
+            <span class="sec-rule"></span>
         </div>
-    </section>
 
-    <!-- Projects -->
-    <section class="projects section" id="projects">
-        <div class="container">
-            <div class="section-head">
-                <span class="section-num">03.</span>
-                <h2 class="section-title">Featured Projects</h2>
-                <span class="section-line"></span>
+        <div class="player-grid">
+            <!-- dialogue box -->
+            <div class="panel dialogue" id="dialogue">
+                <div class="dlg-head">
+                    <span class="dlg-avatar" aria-hidden="true">NP</span>
+                    <span class="dlg-name">NIRAJ</span>
+                    <button class="dlg-skip" id="dlgSkip" type="button">SKIP &raquo;</button>
+                </div>
+                <div class="dlg-body" id="dlgBody" aria-live="polite"></div>
+                <div class="dlg-foot">
+                    <span class="dlg-count" id="dlgCount">1 / 3</span>
+                    <button class="dlg-next" id="dlgNext" type="button">NEXT <span class="caret">&#9656;</span></button>
+                </div>
+                <template id="dlgLines">
+                    <p>I'm a <strong>Data Platform Engineer</strong> with a builder's mindset — currently finishing an <strong>MS in Software Engineering Systems</strong> at <strong>Northeastern University</strong> (May 2026, GPA 3.89).</p>
+                    <p>Most recently at <strong>State Street</strong> I killed manual toil across <strong>150+ Oracle Cloud apps</strong> and moved <strong>25+ Terraform modules</strong> onto a modern Git/Harness pipeline. Before that: two years at <strong>TCS</strong> shipping CI/CD and cloud migrations for enterprise clients.</p>
+                    <p>Lately I live in <strong>agentic AI</strong> — multi-agent cloud architecture review, self-healing CI pipelines, natural-language-to-IaC. The intersection of <span class="accent">infrastructure</span>, <span class="accent">automation</span>, and <span class="accent">intelligence</span> is my favourite place to be.</p>
+                </template>
             </div>
 
-            <p class="section-sub">A selection of recent work — agentic AI, cloud infrastructure, and DevOps automation.</p>
+            <!-- attributes -->
+            <div class="panel attrs">
+                <h3 class="panel-title">ATTRIBUTES</h3>
+                <ul class="attr-list">
+                    <li><span class="attr-name">CLOUD &amp; IaC</span><span class="meter" data-fill="92"><i></i></span><span class="attr-val">92</span></li>
+                    <li><span class="attr-name">DEVOPS / CI-CD</span><span class="meter" data-fill="90"><i></i></span><span class="attr-val">90</span></li>
+                    <li><span class="attr-name">AGENTIC AI</span><span class="meter" data-fill="84"><i></i></span><span class="attr-val">84</span></li>
+                    <li><span class="attr-name">DATA PLATFORMS</span><span class="meter" data-fill="80"><i></i></span><span class="attr-val">80</span></li>
+                    <li><span class="attr-name">BACKEND / APIs</span><span class="meter" data-fill="76"><i></i></span><span class="attr-val">76</span></li>
+                </ul>
 
-            <div class="filter-bar">
-                <button class="filter-btn active" data-filter="all">All</button>
-                <button class="filter-btn" data-filter="ai">Agentic AI</button>
-                <button class="filter-btn" data-filter="cloud">Cloud</button>
-                <button class="filter-btn" data-filter="devops">DevOps</button>
-                <button class="filter-btn" data-filter="data">Data</button>
-            </div>
+                <div class="stat-strip">
+                    <div><span class="dim">LOCATION</span><b>Boston, MA</b></div>
+                    <div><span class="dim">STATUS</span><b class="ok">Open to FT · May 2026</b></div>
+                    <div><span class="dim">CERTS</span><b>AWS DVA · AZ-104</b></div>
+                </div>
 
-            <div class="projects-grid">
-                <!-- AWS Architecture Generator -->
-                <article class="project-card featured" data-tags="ai cloud devops">
-                    <div class="project-badge">Featured</div>
-                    <div class="project-top">
-                        <div class="project-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                        </div>
-                        <a href="https://github.com/Nirajpatel26/AWS-Architecture-Generator" target="_blank" rel="noopener" class="project-link" aria-label="GitHub">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.05c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.08 1.85 1.24 1.85 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                        </a>
-                    </div>
-                    <h3>AWS Architecture Generator</h3>
-                    <p class="project-desc">Natural-language-to-AWS pipeline that turns plain English requirements into architecture diagrams, ready-to-deploy <strong>Terraform</strong>, and accurate cost estimates. Built with multi-stage LLM reasoning and AWS Pricing API integration.</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">Python</span>
-                        <span class="tech-tag">LLM</span>
-                        <span class="tech-tag">Terraform</span>
-                        <span class="tech-tag">AWS Pricing</span>
-                        <span class="tech-tag">Diagrams-as-Code</span>
-                    </div>
-                </article>
-
-                <!-- CI Pipeline Self-Healing Agent -->
-                <article class="project-card" data-tags="ai devops">
-                    <div class="project-top">
-                        <div class="project-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                        </div>
-                        <a href="https://github.com/Nirajpatel26/CI-Pipeline-Self-Healing-Agent" target="_blank" rel="noopener" class="project-link" aria-label="GitHub">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.05c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.08 1.85 1.24 1.85 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                        </a>
-                    </div>
-                    <h3>CI Pipeline Self-Healing Agent</h3>
-                    <p class="project-desc">An autonomous agent that diagnoses failing CI builds, root-causes the error from logs, and proposes (or auto-applies) a fix — closing the loop on flaky pipelines without human triage.</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">LangChain</span>
-                        <span class="tech-tag">Python</span>
-                        <span class="tech-tag">Agents</span>
-                        <span class="tech-tag">CI/CD</span>
-                    </div>
-                </article>
-
-                <!-- Cloud Architecture Reviewer -->
-                <article class="project-card" data-tags="ai cloud">
-                    <div class="project-top">
-                        <div class="project-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
-                        </div>
-                        <a href="https://github.com/Nirajpatel26/Cloud-Architecture-Reviewer-Agentic-System" target="_blank" rel="noopener" class="project-link" aria-label="GitHub">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.05c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.08 1.85 1.24 1.85 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                        </a>
-                    </div>
-                    <h3>Cloud Architecture Reviewer</h3>
-                    <p class="project-desc">Multi-agent system that audits cloud architecture diagrams against the AWS Well-Architected Framework — security, reliability, cost, and performance — and produces a prioritized remediation report.</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">Multi-Agent</span>
-                        <span class="tech-tag">AWS WAF</span>
-                        <span class="tech-tag">Python</span>
-                        <span class="tech-tag">LLM</span>
-                    </div>
-                </article>
-
-                <!-- Multi-Cloud Cost Optimizer -->
-                <article class="project-card featured" data-tags="cloud devops data">
-                    <div class="project-badge">Featured</div>
-                    <div class="project-top">
-                        <div class="project-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                        </div>
-                        <a href="https://github.com/Nirajpatel26/multi-cloud-cost-optimizer" target="_blank" rel="noopener" class="project-link" aria-label="GitHub">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.05c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.08 1.85 1.24 1.85 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                        </a>
-                    </div>
-                    <h3>Multi-Cloud Cost Optimizer</h3>
-                    <p class="project-desc">Automated platform that ingests billing data from <strong>AWS</strong> and <strong>Azure</strong>, identifies waste (idle resources, over-provisioned instances, unattached volumes), and surfaces actionable savings recommendations.</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">Python</span>
-                        <span class="tech-tag">AWS Cost Explorer</span>
-                        <span class="tech-tag">Azure Cost Mgmt</span>
-                        <span class="tech-tag">FinOps</span>
-                    </div>
-                </article>
-
-                <!-- Agentic Course Registration (Kafka) -->
-                <article class="project-card" data-tags="ai data">
-                    <div class="project-top">
-                        <div class="project-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                        </div>
-                        <a href="https://github.com/Nirajpatel26/agentic-ai-course-registration" target="_blank" rel="noopener" class="project-link" aria-label="GitHub">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.05c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.08 1.85 1.24 1.85 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                        </a>
-                    </div>
-                    <h3>Agentic Course Registration</h3>
-                    <p class="project-desc">Multi-agent course-registration system built on <strong>Apache Kafka</strong> pub/sub. Specialist agents coordinate over event streams to handle prerequisite checks, seat allocation, and conflict resolution.</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">Kafka</span>
-                        <span class="tech-tag">Python</span>
-                        <span class="tech-tag">Multi-Agent</span>
-                        <span class="tech-tag">Pub/Sub</span>
-                    </div>
-                </article>
-
-                <!-- GAN Fine-Tuning -->
-                <article class="project-card" data-tags="ai data">
-                    <div class="project-top">
-                        <div class="project-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10z"/></svg>
-                        </div>
-                        <a href="https://github.com/Nirajpatel26/genai-gan-finetuning" target="_blank" rel="noopener" class="project-link" aria-label="GitHub">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.05c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.08 1.85 1.24 1.85 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                        </a>
-                    </div>
-                    <h3>GenAI · GAN Fine-Tuning</h3>
-                    <p class="project-desc">DCGAN implementation with experiments in training stability — gradient penalty, spectral normalization, and learning-rate scheduling. Side-by-side comparison of vanilla vs. stabilized training runs.</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">PyTorch</span>
-                        <span class="tech-tag">DCGAN</span>
-                        <span class="tech-tag">GenAI</span>
-                        <span class="tech-tag">Jupyter</span>
-                    </div>
-                </article>
-
-                <!-- Persona Patterns -->
-                <article class="project-card" data-tags="ai">
-                    <div class="project-top">
-                        <div class="project-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                        </div>
-                        <a href="https://github.com/Nirajpatel26/Persona-Patterns-in-Prompt-Engineering" target="_blank" rel="noopener" class="project-link" aria-label="GitHub">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.05c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.08 1.85 1.24 1.85 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                        </a>
-                    </div>
-                    <h3>Persona Patterns in Prompts</h3>
-                    <p class="project-desc">Empirical study of persona-based prompt patterns — measuring how different role assignments shape LLM output quality, hallucination rate, and reasoning depth across a benchmark suite.</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">Prompt Engineering</span>
-                        <span class="tech-tag">LLM Eval</span>
-                        <span class="tech-tag">Jupyter</span>
-                    </div>
-                </article>
-
-                <!-- Cloud E-commerce -->
-                <article class="project-card" data-tags="cloud devops">
-                    <div class="project-top">
-                        <div class="project-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-                        </div>
-                        <a href="https://github.com/Nirajpatel26/cloud-ecommerce-platform" target="_blank" rel="noopener" class="project-link" aria-label="GitHub">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.05c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.08 1.85 1.24 1.85 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                        </a>
-                    </div>
-                    <h3>Cloud E-Commerce Platform</h3>
-                    <p class="project-desc">Microservices-based e-commerce backend deployed on AWS with auto-scaling, RDS-backed catalog, and a fully Terraformed environment — illustrating cloud-native patterns end-to-end.</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">AWS</span>
-                        <span class="tech-tag">Microservices</span>
-                        <span class="tech-tag">Terraform</span>
-                        <span class="tech-tag">RDS</span>
-                    </div>
-                </article>
-
-                <!-- Cloud-Native Web App -->
-                <article class="project-card" data-tags="cloud devops">
-                    <div class="project-top">
-                        <div class="project-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
-                        </div>
-                        <a href="https://github.com/Nirajpatel26?tab=repositories" target="_blank" rel="noopener" class="project-link" aria-label="GitHub">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.05c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.08 1.85 1.24 1.85 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                        </a>
-                    </div>
-                    <h3>Cloud-Native Web Application</h3>
-                    <p class="project-desc">Multi-cloud (AWS + GCP) web app with Packer-built golden images, Terraformed infra, and GitHub Actions CI/CD. Auto-scaling groups (3–5 instances) and a robust health-check API improved availability by <strong>30%</strong>.</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">AWS</span>
-                        <span class="tech-tag">GCP</span>
-                        <span class="tech-tag">Packer</span>
-                        <span class="tech-tag">Terraform</span>
-                        <span class="tech-tag">GitHub Actions</span>
-                    </div>
-                </article>
-
-                <!-- Scientific Calculator -->
-                <article class="project-card" data-tags="data">
-                    <div class="project-top">
-                        <div class="project-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><line x1="8" y1="14" x2="8" y2="18"/><line x1="12" y1="14" x2="12" y2="18"/></svg>
-                        </div>
-                        <a href="https://github.com/Nirajpatel26/scientific-calculator" target="_blank" rel="noopener" class="project-link" aria-label="GitHub">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.05c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.08 1.85 1.24 1.85 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                        </a>
-                    </div>
-                    <h3>Scientific Calculator</h3>
-                    <p class="project-desc">Modern, feature-rich scientific calculator built with vanilla JavaScript — supports trigonometric, logarithmic, and memory operations behind a sleek minimalist UI.</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">JavaScript</span>
-                        <span class="tech-tag">HTML5</span>
-                        <span class="tech-tag">CSS3</span>
-                    </div>
-                </article>
-
-                <!-- Store Management -->
-                <article class="project-card" data-tags="data">
-                    <div class="project-top">
-                        <div class="project-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-                        </div>
-                        <a href="https://github.com/Nirajpatel26/Team13_Store_Management_System" target="_blank" rel="noopener" class="project-link" aria-label="GitHub">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.05c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.08 1.85 1.24 1.85 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                        </a>
-                    </div>
-                    <h3>Store Management System</h3>
-                    <p class="project-desc">PL/SQL-driven store management with normalized ER schemas for Customers, Products, and Orders. Real-time inventory monitoring and trigger-based automated restocking ensure data integrity.</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">Oracle PL/SQL</span>
-                        <span class="tech-tag">ER Modeling</span>
-                        <span class="tech-tag">Triggers</span>
-                    </div>
-                </article>
-            </div>
-
-            <div class="projects-cta">
-                <a href="https://github.com/Nirajpatel26" target="_blank" rel="noopener" class="btn btn-ghost">
-                    <span>View All on GitHub</span>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.05c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.08 1.85 1.24 1.85 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                <a href="Niraj_Patel_Resume.pdf" download class="btn-arcade btn-block">
+                    &#8681; DOWNLOAD SAVE FILE (RESUME)
                 </a>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Skills -->
-    <section class="skills section" id="skills">
-        <div class="container">
-            <div class="section-head">
-                <span class="section-num">04.</span>
-                <h2 class="section-title">Tech Stack</h2>
-                <span class="section-line"></span>
+<!-- ============ QUESTS / EXPERIENCE ============ -->
+<section class="screen" id="quests">
+    <div class="wrap">
+        <div class="sec-head">
+            <span class="sec-num">02</span>
+            <h2 class="sec-title">QUEST&nbsp;LOG</h2>
+            <span class="sec-rule"></span>
+        </div>
+        <p class="sec-sub">Where the XP actually came from. Click a quest to expand its objectives.</p>
+
+        <div class="quest-log">
+
+            <article class="quest open" data-state="active">
+                <button class="quest-head" type="button" aria-expanded="true">
+                    <span class="quest-id">QUEST 03</span>
+                    <span class="quest-title">MS · Software Engineering Systems</span>
+                    <span class="quest-org">Northeastern University · Boston</span>
+                    <span class="badge badge-active">IN PROGRESS</span>
+                    <span class="quest-chevron" aria-hidden="true">&#9662;</span>
+                </button>
+                <div class="quest-body">
+                    <p class="quest-meta">SEP 2024 &rarr; MAY 2026 &nbsp;·&nbsp; GPA 3.89 / 4.00</p>
+                    <ul class="objectives">
+                        <li class="done">Coursework in cloud computing, DevOps, web systems, and generative AI</li>
+                        <li class="done">Built the agentic-AI project line — multi-agent systems, LLM evaluation, Kafka pub/sub</li>
+                        <li class="todo">Final semester &amp; graduation — May 2026</li>
+                    </ul>
+                    <div class="quest-progress">
+                        <span class="meter" data-fill="85"><i></i></span><span class="attr-val">85%</span>
+                    </div>
+                    <div class="loot">
+                        <span class="loot-label">REWARDS</span>
+                        <span class="pill">Cloud Computing</span><span class="pill">GenAI</span><span class="pill">Distributed Systems</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="quest open" data-state="done">
+                <button class="quest-head" type="button" aria-expanded="true">
+                    <span class="quest-id">QUEST 02</span>
+                    <span class="quest-title">Data Platform Engineer Intern</span>
+                    <span class="quest-org">State Street · Boston, USA</span>
+                    <span class="badge badge-done">COMPLETE</span>
+                    <span class="quest-chevron" aria-hidden="true">&#9662;</span>
+                </button>
+                <div class="quest-body">
+                    <p class="quest-meta">JUN 2025 &rarr; AUG 2025 &nbsp;·&nbsp; INTERNSHIP</p>
+                    <ul class="objectives">
+                        <li class="done">Automated monthly password rotation across <strong>150+ Oracle Cloud applications</strong> with Python and Bash — <strong>5+ hours</strong> of manual toil deleted every month, human error with it</li>
+                        <li class="done">Led migration of <strong>3 Terraform codebases (25+ modules)</strong> from Azure DevOps to Git/Harness + Terraform Enterprise — deploys went from <strong>90 min &rarr; 30 min</strong></li>
+                        <li class="done">Architected an Azure jumpserver with OCI integration via Terraform, unlocking secure cross-cloud access for the data platform team</li>
+                    </ul>
+                    <div class="loot">
+                        <span class="loot-label">REWARDS</span>
+                        <span class="pill">Python</span><span class="pill">Terraform</span><span class="pill">Harness</span><span class="pill">Azure</span><span class="pill">Oracle Cloud</span><span class="pill">Bash</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="quest" data-state="done">
+                <button class="quest-head" type="button" aria-expanded="false">
+                    <span class="quest-id">QUEST 01</span>
+                    <span class="quest-title">Assistant System Engineer</span>
+                    <span class="quest-org">Tata Consultancy Services · Gandhinagar, India</span>
+                    <span class="badge badge-done">COMPLETE</span>
+                    <span class="quest-chevron" aria-hidden="true">&#9662;</span>
+                </button>
+                <div class="quest-body">
+                    <p class="quest-meta">JUL 2022 &rarr; AUG 2024 &nbsp;·&nbsp; FULL-TIME</p>
+                    <ul class="objectives">
+                        <li class="done">Engineered Git-integrated CI/CD pipelines with deployment lead times <strong>under 3 hours</strong></li>
+                        <li class="done">Containerized Java and Node.js microservices with Docker — <strong>7%</strong> less resource use, better scaling</li>
+                        <li class="done">Automated provisioning with Terraform for a <strong>20% reduction</strong> in environment setup time</li>
+                        <li class="done">Migrated on-prem workloads to Azure, processing <strong>1 TB/day</strong> via Databricks and Data Factory</li>
+                        <li class="done">Drove agile adoption — 2-day cycle time, <strong>30%</strong> throughput increase</li>
+                    </ul>
+                    <div class="loot">
+                        <span class="loot-label">REWARDS</span>
+                        <span class="pill">Jenkins</span><span class="pill">Docker</span><span class="pill">Terraform</span><span class="pill">Databricks</span><span class="pill">Data Factory</span><span class="pill">Java</span>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </div>
+</section>
+
+<!-- ============ INVENTORY / PROJECTS ============ -->
+<section class="screen" id="inventory">
+    <div class="wrap">
+        <div class="sec-head">
+            <span class="sec-num">03</span>
+            <h2 class="sec-title">INVENTORY</h2>
+            <span class="sec-rule"></span>
+        </div>
+        <p class="sec-sub">11 items collected. Rarity reflects scope and depth — legendary items are the ones I'd demo first.</p>
+
+        <div class="inv-tabs" id="invTabs">
+            <button class="inv-tab active" data-filter="all">ALL <span class="dim">11</span></button>
+            <button class="inv-tab" data-filter="ai">AGENTIC AI</button>
+            <button class="inv-tab" data-filter="cloud">CLOUD</button>
+            <button class="inv-tab" data-filter="devops">DEVOPS</button>
+            <button class="inv-tab" data-filter="data">DATA</button>
+        </div>
+
+        <div class="inv-grid" id="invGrid">
+
+            <article class="item legendary" data-tags="ai cloud devops">
+                <div class="item-top">
+                    <span class="item-icon" aria-hidden="true">&#9632;</span>
+                    <span class="rarity">LEGENDARY</span>
+                </div>
+                <h3>AWS Architecture Generator</h3>
+                <p>Turns plain-English requirements into architecture diagrams, deploy-ready <strong>Terraform</strong>, and real cost estimates — multi-stage LLM reasoning wired into the AWS Pricing API.</p>
+                <div class="item-stats">
+                    <span>+LLM PIPELINE</span><span>+IaC OUTPUT</span><span>+COST ACCURACY</span>
+                </div>
+                <div class="item-tags">
+                    <span class="pill">Python</span><span class="pill">LLM</span><span class="pill">Terraform</span><span class="pill">AWS Pricing</span><span class="pill">Diagrams-as-Code</span>
+                </div>
+                <a class="item-link" href="https://github.com/Nirajpatel26/AWS-Architecture-Generator" target="_blank" rel="noopener">INSPECT ON GITHUB &rarr;</a>
+            </article>
+
+            <article class="item legendary" data-tags="cloud devops data">
+                <div class="item-top">
+                    <span class="item-icon" aria-hidden="true">&#9670;</span>
+                    <span class="rarity">LEGENDARY</span>
+                </div>
+                <h3>Multi-Cloud Cost Optimizer</h3>
+                <p>Ingests billing data from <strong>AWS</strong> and <strong>Azure</strong>, hunts waste — idle resources, over-provisioned instances, unattached volumes — and surfaces ranked savings actions.</p>
+                <div class="item-stats">
+                    <span>+FINOPS</span><span>+2 CLOUDS</span><span>+WASTE DETECTION</span>
+                </div>
+                <div class="item-tags">
+                    <span class="pill">Python</span><span class="pill">AWS Cost Explorer</span><span class="pill">Azure Cost Mgmt</span><span class="pill">FinOps</span>
+                </div>
+                <a class="item-link" href="https://github.com/Nirajpatel26/multi-cloud-cost-optimizer" target="_blank" rel="noopener">INSPECT ON GITHUB &rarr;</a>
+            </article>
+
+            <article class="item epic" data-tags="ai devops">
+                <div class="item-top">
+                    <span class="item-icon" aria-hidden="true">&#10214;&#10215;</span>
+                    <span class="rarity">EPIC</span>
+                </div>
+                <h3>CI Pipeline Self-Healing Agent</h3>
+                <p>An autonomous agent that reads failing builds, root-causes from logs, and proposes or auto-applies the fix — closing the loop on flaky pipelines without human triage.</p>
+                <div class="item-stats"><span>+AUTO-REMEDIATION</span><span>+LOG RCA</span></div>
+                <div class="item-tags">
+                    <span class="pill">LangChain</span><span class="pill">Python</span><span class="pill">Agents</span><span class="pill">CI/CD</span>
+                </div>
+                <a class="item-link" href="https://github.com/Nirajpatel26/CI-Pipeline-Self-Healing-Agent" target="_blank" rel="noopener">INSPECT ON GITHUB &rarr;</a>
+            </article>
+
+            <article class="item epic" data-tags="ai cloud">
+                <div class="item-top">
+                    <span class="item-icon" aria-hidden="true">&#9729;</span>
+                    <span class="rarity">EPIC</span>
+                </div>
+                <h3>Cloud Architecture Reviewer</h3>
+                <p>Multi-agent system that audits cloud architecture against the AWS Well-Architected Framework — security, reliability, cost, performance — and emits a prioritized remediation report.</p>
+                <div class="item-stats"><span>+MULTI-AGENT</span><span>+WAF AUDIT</span></div>
+                <div class="item-tags">
+                    <span class="pill">Multi-Agent</span><span class="pill">AWS WAF</span><span class="pill">Python</span><span class="pill">LLM</span>
+                </div>
+                <a class="item-link" href="https://github.com/Nirajpatel26/Cloud-Architecture-Reviewer-Agentic-System" target="_blank" rel="noopener">INSPECT ON GITHUB &rarr;</a>
+            </article>
+
+            <article class="item epic" data-tags="ai data">
+                <div class="item-top">
+                    <span class="item-icon" aria-hidden="true">&#8644;</span>
+                    <span class="rarity">EPIC</span>
+                </div>
+                <h3>Agentic Course Registration</h3>
+                <p>Multi-agent registration system on <strong>Apache Kafka</strong> pub/sub — specialist agents coordinate over event streams for prerequisite checks, seat allocation, and conflict resolution.</p>
+                <div class="item-stats"><span>+EVENT-DRIVEN</span><span>+AGENT COORD</span></div>
+                <div class="item-tags">
+                    <span class="pill">Kafka</span><span class="pill">Python</span><span class="pill">Multi-Agent</span><span class="pill">Pub/Sub</span>
+                </div>
+                <a class="item-link" href="https://github.com/Nirajpatel26/agentic-ai-course-registration" target="_blank" rel="noopener">INSPECT ON GITHUB &rarr;</a>
+            </article>
+
+            <article class="item epic" data-tags="cloud devops">
+                <div class="item-top">
+                    <span class="item-icon" aria-hidden="true">&#9741;</span>
+                    <span class="rarity">EPIC</span>
+                </div>
+                <h3>Cloud-Native Web Application</h3>
+                <p>Multi-cloud (AWS + GCP) app with Packer-built golden images, Terraformed infra, and GitHub Actions CI/CD. Auto-scaling groups (3–5 instances) and health-check APIs lifted availability <strong>30%</strong>.</p>
+                <div class="item-stats"><span>+2 CLOUDS</span><span>+AUTOSCALING</span><span>+30% UPTIME</span></div>
+                <div class="item-tags">
+                    <span class="pill">AWS</span><span class="pill">GCP</span><span class="pill">Packer</span><span class="pill">Terraform</span><span class="pill">GitHub Actions</span>
+                </div>
+                <a class="item-link" href="https://github.com/Nirajpatel26?tab=repositories" target="_blank" rel="noopener">INSPECT ON GITHUB &rarr;</a>
+            </article>
+
+            <article class="item rare" data-tags="ai data">
+                <div class="item-top">
+                    <span class="item-icon" aria-hidden="true">&#9678;</span>
+                    <span class="rarity">RARE</span>
+                </div>
+                <h3>GenAI · GAN Fine-Tuning</h3>
+                <p>DCGAN implementation with training-stability experiments — gradient penalty, spectral normalization, LR scheduling — plus side-by-side vanilla vs. stabilized runs.</p>
+                <div class="item-stats"><span>+TRAINING STABILITY</span></div>
+                <div class="item-tags">
+                    <span class="pill">PyTorch</span><span class="pill">DCGAN</span><span class="pill">GenAI</span><span class="pill">Jupyter</span>
+                </div>
+                <a class="item-link" href="https://github.com/Nirajpatel26/genai-gan-finetuning" target="_blank" rel="noopener">INSPECT ON GITHUB &rarr;</a>
+            </article>
+
+            <article class="item rare" data-tags="ai">
+                <div class="item-top">
+                    <span class="item-icon" aria-hidden="true">&#9634;</span>
+                    <span class="rarity">RARE</span>
+                </div>
+                <h3>Persona Patterns in Prompts</h3>
+                <p>Empirical study of persona-based prompting — how role assignment moves output quality, hallucination rate, and reasoning depth across a benchmark suite.</p>
+                <div class="item-stats"><span>+LLM EVAL</span></div>
+                <div class="item-tags">
+                    <span class="pill">Prompt Engineering</span><span class="pill">LLM Eval</span><span class="pill">Jupyter</span>
+                </div>
+                <a class="item-link" href="https://github.com/Nirajpatel26/Persona-Patterns-in-Prompt-Engineering" target="_blank" rel="noopener">INSPECT ON GITHUB &rarr;</a>
+            </article>
+
+            <article class="item rare" data-tags="cloud devops">
+                <div class="item-top">
+                    <span class="item-icon" aria-hidden="true">&#9788;</span>
+                    <span class="rarity">RARE</span>
+                </div>
+                <h3>Cloud E-Commerce Platform</h3>
+                <p>Microservices e-commerce backend on AWS — auto-scaling, RDS-backed catalog, fully Terraformed environment. Cloud-native patterns end to end.</p>
+                <div class="item-stats"><span>+MICROSERVICES</span></div>
+                <div class="item-tags">
+                    <span class="pill">AWS</span><span class="pill">Microservices</span><span class="pill">Terraform</span><span class="pill">RDS</span>
+                </div>
+                <a class="item-link" href="https://github.com/Nirajpatel26/cloud-ecommerce-platform" target="_blank" rel="noopener">INSPECT ON GITHUB &rarr;</a>
+            </article>
+
+            <article class="item common" data-tags="data">
+                <div class="item-top">
+                    <span class="item-icon" aria-hidden="true">&#8862;</span>
+                    <span class="rarity">COMMON</span>
+                </div>
+                <h3>Store Management System</h3>
+                <p>PL/SQL store management with normalized ER schemas for customers, products, and orders — real-time inventory monitoring and trigger-based automated restocking.</p>
+                <div class="item-stats"><span>+DATA INTEGRITY</span></div>
+                <div class="item-tags">
+                    <span class="pill">Oracle PL/SQL</span><span class="pill">ER Modeling</span><span class="pill">Triggers</span>
+                </div>
+                <a class="item-link" href="https://github.com/Nirajpatel26/Team13_Store_Management_System" target="_blank" rel="noopener">INSPECT ON GITHUB &rarr;</a>
+            </article>
+
+            <article class="item common" data-tags="data">
+                <div class="item-top">
+                    <span class="item-icon" aria-hidden="true">&#8801;</span>
+                    <span class="rarity">COMMON</span>
+                </div>
+                <h3>Scientific Calculator</h3>
+                <p>Feature-rich scientific calculator in vanilla JavaScript — trigonometric, logarithmic, and memory operations behind a deliberately minimal UI.</p>
+                <div class="item-stats"><span>+ZERO DEPS</span></div>
+                <div class="item-tags">
+                    <span class="pill">JavaScript</span><span class="pill">HTML5</span><span class="pill">CSS3</span>
+                </div>
+                <a class="item-link" href="https://github.com/Nirajpatel26/scientific-calculator" target="_blank" rel="noopener">INSPECT ON GITHUB &rarr;</a>
+            </article>
+
+        </div>
+
+        <p class="inv-empty" id="invEmpty" hidden>NO ITEMS IN THIS SLOT.</p>
+
+        <div class="center">
+            <a class="btn-ghost" href="https://github.com/Nirajpatel26" target="_blank" rel="noopener">VIEW FULL STASH ON GITHUB &rarr;</a>
+        </div>
+    </div>
+</section>
+
+<!-- ============ SKILL TREE ============ -->
+<section class="screen" id="skills">
+    <div class="wrap">
+        <div class="sec-head">
+            <span class="sec-num">04</span>
+            <h2 class="sec-title">SKILL&nbsp;TREE</h2>
+            <span class="sec-rule"></span>
+        </div>
+        <p class="sec-sub">Six branches, all unlocked. Pips are honest self-assessment, not marketing.</p>
+
+        <div class="tree" id="tree">
+
+            <div class="branch">
+                <div class="branch-root"><span class="root-icon">&#9729;</span> CLOUD &amp; INFRA</div>
+                <ul class="nodes">
+                    <li class="node" data-pips="5"><span>AWS</span></li>
+                    <li class="node" data-pips="5"><span>Terraform</span></li>
+                    <li class="node" data-pips="4"><span>Azure</span></li>
+                    <li class="node" data-pips="4"><span>Oracle Cloud</span></li>
+                    <li class="node" data-pips="3"><span>GCP</span></li>
+                    <li class="node" data-pips="4"><span>Docker</span></li>
+                    <li class="node" data-pips="3"><span>Packer</span></li>
+                </ul>
             </div>
 
-            <div class="skills-grid">
-                <div class="skill-card">
-                    <div class="skill-card-head">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
-                        <h3>Cloud & Infra</h3>
-                    </div>
-                    <div class="skill-tags">
-                        <span class="skill-tag">AWS</span>
-                        <span class="skill-tag">Azure</span>
-                        <span class="skill-tag">GCP</span>
-                        <span class="skill-tag">Oracle Cloud</span>
-                        <span class="skill-tag">Terraform</span>
-                        <span class="skill-tag">Packer</span>
-                        <span class="skill-tag">Docker</span>
-                    </div>
-                </div>
+            <div class="branch">
+                <div class="branch-root"><span class="root-icon">&#10214;&#10215;</span> DEVOPS &amp; CI/CD</div>
+                <ul class="nodes">
+                    <li class="node" data-pips="5"><span>GitHub Actions</span></li>
+                    <li class="node" data-pips="4"><span>Jenkins</span></li>
+                    <li class="node" data-pips="4"><span>Harness</span></li>
+                    <li class="node" data-pips="4"><span>Azure DevOps</span></li>
+                    <li class="node" data-pips="3"><span>GitLab CI</span></li>
+                    <li class="node" data-pips="3"><span>SonarQube</span></li>
+                </ul>
+            </div>
 
-                <div class="skill-card">
-                    <div class="skill-card-head">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                        <h3>DevOps & CI/CD</h3>
-                    </div>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Jenkins</span>
-                        <span class="skill-tag">GitHub Actions</span>
-                        <span class="skill-tag">Azure DevOps</span>
-                        <span class="skill-tag">Harness</span>
-                        <span class="skill-tag">SonarQube</span>
-                        <span class="skill-tag">GitLab CI</span>
-                    </div>
-                </div>
+            <div class="branch">
+                <div class="branch-root"><span class="root-icon">&#9672;</span> AI &amp; GENAI</div>
+                <ul class="nodes">
+                    <li class="node" data-pips="4"><span>LLM Agents</span></li>
+                    <li class="node" data-pips="4"><span>LangChain</span></li>
+                    <li class="node" data-pips="4"><span>Prompt Eng.</span></li>
+                    <li class="node" data-pips="3"><span>RAG</span></li>
+                    <li class="node" data-pips="3"><span>PyTorch</span></li>
+                    <li class="node" data-pips="3"><span>Vector DBs</span></li>
+                </ul>
+            </div>
 
-                <div class="skill-card">
-                    <div class="skill-card-head">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 10v6M4.22 4.22l4.24 4.24m7.07 7.07 4.24 4.24M1 12h6m10 0h6M4.22 19.78l4.24-4.24m7.07-7.07 4.24-4.24"/></svg>
-                        <h3>AI & GenAI</h3>
-                    </div>
-                    <div class="skill-tags">
-                        <span class="skill-tag">LangChain</span>
-                        <span class="skill-tag">LLM Agents</span>
-                        <span class="skill-tag">Prompt Eng.</span>
-                        <span class="skill-tag">PyTorch</span>
-                        <span class="skill-tag">RAG</span>
-                        <span class="skill-tag">Vector DBs</span>
-                    </div>
-                </div>
+            <div class="branch">
+                <div class="branch-root"><span class="root-icon">&#9002;</span> LANGUAGES</div>
+                <ul class="nodes">
+                    <li class="node" data-pips="5"><span>Python</span></li>
+                    <li class="node" data-pips="4"><span>Bash</span></li>
+                    <li class="node" data-pips="4"><span>JavaScript</span></li>
+                    <li class="node" data-pips="3"><span>Java</span></li>
+                    <li class="node" data-pips="3"><span>TypeScript</span></li>
+                    <li class="node" data-pips="2"><span>Scala</span></li>
+                    <li class="node" data-pips="2"><span>C++</span></li>
+                </ul>
+            </div>
 
-                <div class="skill-card">
-                    <div class="skill-card-head">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                        <h3>Languages</h3>
-                    </div>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Python</span>
-                        <span class="skill-tag">Java</span>
-                        <span class="skill-tag">JavaScript</span>
-                        <span class="skill-tag">TypeScript</span>
-                        <span class="skill-tag">Bash</span>
-                        <span class="skill-tag">Scala</span>
-                        <span class="skill-tag">C++</span>
-                    </div>
-                </div>
+            <div class="branch">
+                <div class="branch-root"><span class="root-icon">&#9707;</span> DATA &amp; STORAGE</div>
+                <ul class="nodes">
+                    <li class="node" data-pips="4"><span>PostgreSQL</span></li>
+                    <li class="node" data-pips="4"><span>Databricks</span></li>
+                    <li class="node" data-pips="4"><span>Kafka</span></li>
+                    <li class="node" data-pips="3"><span>Apache Spark</span></li>
+                    <li class="node" data-pips="3"><span>MongoDB</span></li>
+                    <li class="node" data-pips="3"><span>Oracle DB</span></li>
+                    <li class="node" data-pips="3"><span>MySQL</span></li>
+                </ul>
+            </div>
 
-                <div class="skill-card">
-                    <div class="skill-card-head">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-                        <h3>Data & Storage</h3>
-                    </div>
-                    <div class="skill-tags">
-                        <span class="skill-tag">PostgreSQL</span>
-                        <span class="skill-tag">MongoDB</span>
-                        <span class="skill-tag">MySQL</span>
-                        <span class="skill-tag">Oracle DB</span>
-                        <span class="skill-tag">Apache Spark</span>
-                        <span class="skill-tag">Kafka</span>
-                        <span class="skill-tag">Databricks</span>
-                    </div>
-                </div>
+            <div class="branch">
+                <div class="branch-root"><span class="root-icon">&#9881;</span> PRACTICES</div>
+                <ul class="nodes">
+                    <li class="node" data-pips="5"><span>IaC</span></li>
+                    <li class="node" data-pips="4"><span>GitOps</span></li>
+                    <li class="node" data-pips="4"><span>Observability</span></li>
+                    <li class="node" data-pips="4"><span>Agile / Scrum</span></li>
+                    <li class="node" data-pips="3"><span>Microservices</span></li>
+                    <li class="node" data-pips="3"><span>FinOps</span></li>
+                </ul>
+            </div>
 
-                <div class="skill-card">
-                    <div class="skill-card-head">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                        <h3>Practices</h3>
-                    </div>
-                    <div class="skill-tags">
-                        <span class="skill-tag">IaC</span>
-                        <span class="skill-tag">GitOps</span>
-                        <span class="skill-tag">Microservices</span>
-                        <span class="skill-tag">Agile / Scrum</span>
-                        <span class="skill-tag">FinOps</span>
-                        <span class="skill-tag">Observability</span>
-                    </div>
-                </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ TROPHIES ============ -->
+<section class="screen" id="trophies">
+    <div class="wrap">
+        <div class="sec-head">
+            <span class="sec-num">05</span>
+            <h2 class="sec-title">TROPHY&nbsp;ROOM</h2>
+            <span class="sec-rule"></span>
+        </div>
+
+        <div class="trophy-grid">
+            <div class="panel cert">
+                <span class="cert-badge">&#9733;</span>
+                <h3>AWS Certified Developer</h3>
+                <p class="dim">Associate · Amazon Web Services</p>
+            </div>
+            <div class="panel cert">
+                <span class="cert-badge">&#9733;</span>
+                <h3>Azure Administrator</h3>
+                <p class="dim">AZ-104 · Microsoft</p>
+            </div>
+            <div class="panel cert">
+                <span class="cert-badge">&#9733;</span>
+                <h3>GPA 3.89 / 4.00</h3>
+                <p class="dim">MS SES · Northeastern University</p>
             </div>
         </div>
-    </section>
 
-    <!-- Recommendations -->
-    <section class="recommendations section" id="recommendations">
-        <div class="container">
-            <div class="section-head">
-                <span class="section-num">05.</span>
-                <h2 class="section-title">What People Say</h2>
-                <span class="section-line"></span>
-            </div>
+        <h3 class="sub-head">PARTY&nbsp;REVIEW</h3>
+        <article class="panel testimonial">
+            <span class="quote-mark" aria-hidden="true">&ldquo;</span>
+            <p>
+                I had the pleasure of working with Niraj on infrastructure automation projects at TCS. His systematic
+                problem-solving and focus on optimizing CI/CD pipelines and Azure migrations greatly improved our
+                workflows. Niraj consistently looks for automation opportunities and understands how his work impacts
+                the entire development cycle, making the team more efficient. He is a technically strong and
+                collaborative engineer.
+            </p>
+            <footer class="t-author">
+                <span class="t-avatar">SS</span>
+                <span>
+                    <b>Shruti Satpute</b>
+                    <em>Data Engineer · TCS – Johnson &amp; Johnson</em>
+                    <em class="dim">Managed Niraj directly · Aug 2025</em>
+                </span>
+            </footer>
+        </article>
 
-            <div class="recommendations-grid">
-                <article class="rec-card">
-                    <svg class="quote-mark" width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h2c0 0 0 4-3 4v4zm12 0c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h2c0 0 0 4-3 4v4z"/></svg>
-                    <p class="rec-text">
-                        I had the pleasure of working with Niraj on infrastructure automation projects at TCS. His
-                        systematic problem-solving and focus on optimizing CI/CD pipelines and Azure migrations greatly
-                        improved our workflows. Niraj consistently looks for automation opportunities and understands
-                        how his work impacts the entire development cycle, making the team more efficient. He is a
-                        technically strong and collaborative engineer.
-                    </p>
-                    <div class="rec-author">
-                        <div class="rec-avatar">SS</div>
-                        <div>
-                            <h4>Shruti Satpute</h4>
-                            <p>Data Engineer · TCS – Johnson & Johnson</p>
-                            <p class="rec-meta">Managed Niraj directly · Aug 2025</p>
-                        </div>
-                    </div>
-                </article>
-            </div>
+        <h3 class="sub-head">ACHIEVEMENTS <span class="dim" id="achHeadCount">0 / 8</span></h3>
+        <div class="ach-grid" id="achGrid"><!-- injected by JS --></div>
+    </div>
+</section>
+
+<!-- ============ ARCADE / MINI-GAME ============ -->
+<section class="screen" id="arcade">
+    <div class="wrap">
+        <div class="sec-head">
+            <span class="sec-num">06</span>
+            <h2 class="sec-title">ARCADE</h2>
+            <span class="sec-rule"></span>
         </div>
-    </section>
+        <p class="sec-sub">
+            <strong>SHIP&nbsp;IT!</strong> — you're a deploy racing to prod. Jump the bugs, duck nothing, break your own record.
+        </p>
 
-    <!-- Contact -->
-    <section class="contact section" id="contact">
-        <div class="container">
-            <div class="section-head">
-                <span class="section-num">06.</span>
-                <h2 class="section-title">Get In Touch</h2>
-                <span class="section-line"></span>
+        <div class="cab">
+            <div class="cab-top">
+                <span class="cab-title">SHIP&nbsp;IT!</span>
+                <span class="cab-scores">
+                    <span>SCORE <b id="gScore">0000</b></span>
+                    <span class="dim">HI <b id="gBest">0000</b></span>
+                </span>
             </div>
-
-            <div class="contact-wrap">
-                <h3 class="contact-headline">Let's build something great.</h3>
-                <p class="contact-description">
-                    I'm currently looking for full-time opportunities starting <strong>May 2026</strong> in
-                    Data Platform, Cloud, DevOps, or Applied AI roles. Always open to interesting conversations —
-                    drop a line and I'll reply within a day.
-                </p>
-
-                <div class="contact-grid">
-                    <a href="mailto:patel.niraju@northeastern.edu" class="contact-card">
-                        <div class="contact-icon">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                        </div>
-                        <h4>Email</h4>
-                        <p>patel.niraju@northeastern.edu</p>
-                    </a>
-                    <a href="https://www.linkedin.com/in/niraj-patel-a11516154/" target="_blank" rel="noopener" class="contact-card">
-                        <div class="contact-icon">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-                        </div>
-                        <h4>LinkedIn</h4>
-                        <p>/in/niraj-patel-a11516154</p>
-                    </a>
-                    <a href="https://github.com/Nirajpatel26" target="_blank" rel="noopener" class="contact-card">
-                        <div class="contact-icon">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.05c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.08 1.85 1.24 1.85 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                        </div>
-                        <h4>GitHub</h4>
-                        <p>github.com/Nirajpatel26</p>
-                    </a>
+            <div class="cab-screen">
+                <canvas id="game" width="900" height="260" aria-label="Ship It mini-game"></canvas>
+                <div class="cab-overlay" id="gOverlay">
+                    <p class="g-big" id="gTitle">SHIP&nbsp;IT!</p>
+                    <p class="g-msg" id="gMsg">SPACE / TAP to jump</p>
+                    <button class="btn-arcade" id="gBtn" type="button">INSERT COIN</button>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <p class="footer-brand">&lt;NP/&gt; · Niraj Patel</p>
-                <p class="footer-meta">Designed & built with <span class="text-accent">passion</span>. © 2026.</p>
+            <div class="cab-foot">
+                <span><kbd>SPACE</kbd> / <kbd>&uarr;</kbd> / TAP — jump</span>
+                <span><kbd>P</kbd> — pause</span>
+                <button class="btn-link" id="gReset" type="button">reset high score</button>
             </div>
         </div>
-    </footer>
+    </div>
+</section>
 
-    <script src="script.js"></script>
+<!-- ============ CONTACT ============ -->
+<section class="screen" id="contact">
+    <div class="wrap">
+        <div class="sec-head">
+            <span class="sec-num">07</span>
+            <h2 class="sec-title">NEW&nbsp;GAME</h2>
+            <span class="sec-rule"></span>
+        </div>
+
+        <div class="contact-wrap">
+            <h3 class="contact-h">LET'S&nbsp;BUILD&nbsp;SOMETHING&nbsp;GREAT.</h3>
+            <p class="contact-p">
+                I'm looking for full-time roles starting <strong>May 2026</strong> — Data Platform, Cloud, DevOps, or
+                Applied AI. Always up for an interesting conversation. Drop a line and I'll reply within a day.
+            </p>
+
+            <div class="contact-grid">
+                <a class="pickup" href="mailto:patel.niraju@northeastern.edu">
+                    <span class="pickup-icon">&#9993;</span>
+                    <b>EMAIL</b>
+                    <span class="dim">patel.niraju@northeastern.edu</span>
+                </a>
+                <a class="pickup" href="https://www.linkedin.com/in/niraj-patel-a11516154/" target="_blank" rel="noopener">
+                    <span class="pickup-icon">in</span>
+                    <b>LINKEDIN</b>
+                    <span class="dim">/in/niraj-patel-a11516154</span>
+                </a>
+                <a class="pickup" href="https://github.com/Nirajpatel26" target="_blank" rel="noopener">
+                    <span class="pickup-icon">&#9670;</span>
+                    <b>GITHUB</b>
+                    <span class="dim">github.com/Nirajpatel26</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="foot">
+    <div class="wrap foot-row">
+        <p>&lt;NP/&gt; · NIRAJ PATEL</p>
+        <p class="dim">THANKS FOR PLAYING · &copy; 2026 · NO CONTINUES REQUIRED</p>
+    </div>
+</footer>
+
+<!-- achievement toast host -->
+<div class="toasts" id="toasts" aria-live="polite" aria-atomic="false"></div>
+
+<script src="main.js"></script>
 </body>
 </html>
