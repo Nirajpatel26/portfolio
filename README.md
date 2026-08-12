@@ -4,25 +4,29 @@ Personal portfolio website showcasing my experience as a Data Platform Engineer 
 
 ## 🌟 Features
 
+- **Arcade Theme** - Retro-console styling: CRT frames, scanlines, pixel type, boot screen
+- **Interactive** - Quest log, tiered inventory, skill tree, 8 unlockable achievements, konami code
+- **Playable** - *SHIP IT!*, a canvas endless runner with a persisted high score
 - **Responsive Design** - Fully optimized for desktop, tablet, and mobile devices
-- **Modern UI/UX** - Clean, professional design with smooth animations
-- **Performance Optimized** - Fast loading times and efficient code
-- **Accessible** - WCAG compliant with semantic HTML
+- **Accessible** - Semantic HTML, keyboard-playable game, honours `prefers-reduced-motion`
+- **Performance Optimized** - No dependencies, no build step, fast loading times
 
 ## 🛠️ Technologies Used
 
-- HTML5
+- HTML5 & Canvas
 - CSS3 (with CSS Grid & Flexbox)
 - Vanilla JavaScript
-- Google Fonts (Inter)
+- Web Audio API (opt-in sound effects)
+- Google Fonts (Press Start 2P, JetBrains Mono, Inter)
 
 ## 📂 Project Structure
 
 ```
 portfolio/
 ├── index.html          # Main HTML file
-├── styles.css          # Stylesheet with all styling
-├── script.js           # JavaScript for interactivity
+├── main.css            # Stylesheet with all styling
+├── main.js             # JavaScript for interactivity
+├── profile.jpg         # Profile photo
 └── README.md           # Project documentation
 ```
 
@@ -87,12 +91,14 @@ CNAME   www     nirajpatel26.github.io          Automatic
 
 ## 📝 Sections
 
-- **Hero** - Introduction with quick stats
-- **About** - Background, education, and certifications
-- **Experience** - Professional work history timeline
-- **Projects** - Featured technical projects
-- **Skills** - Technical skills organized by category
-- **Contact** - Multiple ways to get in touch
+- **Home** - Introduction with quick stats and a flickering CRT portrait
+- **01 Player Card** - Background, education, and attribute meters
+- **02 Quest Log** - Professional work history as expandable quests
+- **03 Inventory** - Technical projects, tiered by rarity and filterable
+- **04 Skill Tree** - Technical skills as branches with mastery pips
+- **05 Trophy Room** - Certifications, recommendations, and achievements
+- **06 Arcade** - A playable mini-game
+- **07 New Game** - Multiple ways to get in touch
 
 ## 📧 Contact
 
