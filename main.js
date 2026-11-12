@@ -156,8 +156,9 @@
         'BOOT  · loading player data ......... OK',
         'MOUNT · /dev/aws /dev/azure /dev/oci  OK',
         'INIT  · terraform state ............. OK',
-        'SPAWN · agents x4 ................... OK',
-        'READY · 11 items in inventory'
+        'SYNC  · argocd · eks clusters x3 .... OK',
+        'AUDIT · hipaa · soc2 · hitrust ...... OK',
+        'READY · 12 items in inventory'
     ];
 
     function endBoot() {
@@ -299,10 +300,10 @@
        Role rotator
        ===================================================== */
     const ROLES = [
-        'DATA PLATFORM ENGINEER',
-        'CLOUD / DEVOPS ENGINEER',
-        'AGENTIC AI BUILDER',
-        'INFRA AUTOMATION NERD'
+        'DEVOPS / PLATFORM ENGINEER',
+        'SITE RELIABILITY ENGINEER',
+        'CLOUD SECURITY AUTOMATOR',
+        'KUBERNETES WRANGLER'
     ];
     const roleEl = $('#roleRotator');
     if (roleEl && !REDUCED) {
